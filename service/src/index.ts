@@ -73,9 +73,12 @@ router.post('/verify', async (req, res) => {
     if (!token)
       throw new Error('Secret key is empty')
 
-    const response = await axios.get('https://api.bugstack.cn/interfaces/BlogApi.php', {
-      params: { token },
+    const response = await axios.get('https://api.bugstack.cn/interfaces/CheckCode.php', {
+      params: { code: token },
+      timeout: 5000,
     })
+
+    process.env.AUTH_SECRET_KEY = token
 
     if (response.data !== 'success')
       throw new Error('密钥无效 | Secret key is invalid')
